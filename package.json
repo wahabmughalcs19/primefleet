@@ -1,0 +1,32 @@
+{
+  "name": "prime-fleet",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.17.1",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend,admin -c blue,green,magenta \"pnpm --filter @workspace/backend dev\" \"pnpm --filter @workspace/frontend dev\" \"pnpm --filter @workspace/admin dev\"",
+    "dev:backend": "pnpm --filter @workspace/backend dev",
+    "dev:frontend": "pnpm --filter @workspace/frontend dev",
+    "dev:admin": "pnpm --filter @workspace/admin dev",
+    "build": "pnpm --filter @workspace/frontend build && pnpm --filter @workspace/admin build && node scripts/assemble-vercel.mjs",
+    "start": "pnpm --filter @workspace/backend start"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "drizzle-orm": "catalog:",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "pino": "^9.14.0",
+    "pino-http": "^10.5.0",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "esbuild": "^0.25.12",
+    "typescript": "~5.9.3"
+  }
+}

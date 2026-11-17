@@ -1,0 +1,1034 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Prime Fleet Solutions public content and administration API.
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Service health
+  - name: public
+    description: Public website content and contact
+  - name: admin
+    description: Protected business administration
+  - name: auth
+    description: Current signed-in user's app access
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /auth/me:
+    get:
+      operationId: getCurrentAccess
+      tags: [auth]
+      summary: Get current user's authentication and administrator status
+      responses:
+        "200":
+          description: Current access state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessState"
+  /content:
+    get:
+      operationId: getPublicContent
+      tags: [public]
+      summary: Get public website content and business settings
+      responses:
+        "200":
+          description: Public site content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteContent"
+  /admin/content:
+    put:
+      operationId: updateSiteContent
+      tags: [admin]
+      summary: Update editable site content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteContentInput"
+      responses:
+        "200":
+          description: Updated content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteContent"
+  /services:
+    get:
+      operationId: listPublicServices
+      tags: [public]
+      summary: List published services
+      responses:
+        "200":
+          description: Published services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+  /admin/services:
+    get:
+      operationId: listAdminServices
+      tags: [admin]
+      summary: List all services for administration
+      responses:
+        "200":
+          description: All services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+    post:
+      operationId: createService
+      tags: [admin]
+      summary: Create a service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceInput"
+      responses:
+        "201":
+          description: Created service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+  /admin/services/{id}:
+    patch:
+      operationId: updateService
+      tags: [admin]
+      summary: Update a service
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceUpdate"
+      responses:
+        "200":
+          description: Updated service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+    delete:
+      operationId: deleteService
+      tags: [admin]
+      summary: Delete a service
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Service deleted
+  /vehicle-categories:
+    get:
+      operationId: listPublicVehicleCategories
+      tags: [public]
+      summary: List active vehicle categories
+      responses:
+        "200":
+          description: Active categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VehicleCategory"
+  /admin/vehicle-categories:
+    get:
+      operationId: listAdminVehicleCategories
+      tags: [admin]
+      summary: List all vehicle categories
+      responses:
+        "200":
+          description: All categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VehicleCategory"
+    post:
+      operationId: createVehicleCategory
+      tags: [admin]
+      summary: Create a vehicle category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleCategoryInput"
+      responses:
+        "201":
+          description: Created category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleCategory"
+  /admin/vehicle-categories/{id}:
+    patch:
+      operationId: updateVehicleCategory
+      tags: [admin]
+      summary: Update a vehicle category
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleCategoryUpdate"
+      responses:
+        "200":
+          description: Updated category
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehicleCategory"
+    delete:
+      operationId: deleteVehicleCategory
+      tags: [admin]
+      summary: Delete a vehicle category
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Category deleted
+  /brands:
+    get:
+      operationId: listPublicBrands
+      tags: [public]
+      summary: List active vehicle brands
+      responses:
+        "200":
+          description: Active brands
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Brand"
+  /admin/brands:
+    get:
+      operationId: listAdminBrands
+      tags: [admin]
+      summary: List all vehicle brands
+      responses:
+        "200":
+          description: All brands
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Brand"
+    post:
+      operationId: createBrand
+      tags: [admin]
+      summary: Create a vehicle brand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BrandInput"
+      responses:
+        "201":
+          description: Created brand
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Brand"
+  /admin/brands/{id}:
+    patch:
+      operationId: updateBrand
+      tags: [admin]
+      summary: Update a vehicle brand
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BrandUpdate"
+      responses:
+        "200":
+          description: Updated brand
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Brand"
+    delete:
+      operationId: deleteBrand
+      tags: [admin]
+      summary: Delete a vehicle brand
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Brand deleted
+  /admin/dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [admin]
+      summary: Get real record counts and recent maintenance requests
+      responses:
+        "200":
+          description: Dashboard totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+  /admin/companies:
+    get:
+      operationId: listCompanies
+      tags: [admin]
+      summary: Search and list companies
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Company records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Company"
+    post:
+      operationId: createCompany
+      tags: [admin]
+      summary: Create a company or customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyInput"
+      responses:
+        "201":
+          description: Created company
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+  /admin/companies/{id}:
+    get:
+      operationId: getCompany
+      tags: [admin]
+      summary: Get a company and its vehicles
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "200":
+          description: Company record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyDetail"
+    patch:
+      operationId: updateCompany
+      tags: [admin]
+      summary: Update a company
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyUpdate"
+      responses:
+        "200":
+          description: Updated company
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Company"
+    delete:
+      operationId: deleteCompany
+      tags: [admin]
+      summary: Delete a company without vehicles or requests
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Company deleted
+  /admin/vehicles:
+    get:
+      operationId: listVehicles
+      tags: [admin]
+      summary: Search vehicles by registration or company
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: companyId
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Vehicle records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+    post:
+      operationId: createVehicle
+      tags: [admin]
+      summary: Register a vehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleInput"
+      responses:
+        "201":
+          description: Created vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+  /admin/vehicles/search:
+    get:
+      operationId: searchVehicles
+      tags: [admin]
+      summary: Find matching vehicles by partial registration number
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: Matching vehicles with company and category details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vehicle"
+  /admin/vehicles/{id}:
+    patch:
+      operationId: updateVehicle
+      tags: [admin]
+      summary: Update a vehicle
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleUpdate"
+      responses:
+        "200":
+          description: Updated vehicle
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+    delete:
+      operationId: deleteVehicle
+      tags: [admin]
+      summary: Delete a vehicle without maintenance requests
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      responses:
+        "204":
+          description: Vehicle deleted
+  /admin/maintenance-requests:
+    get:
+      operationId: listMaintenanceRequests
+      tags: [admin]
+      summary: Search maintenance requests
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [New, In Progress, Completed, Cancelled]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: Maintenance requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MaintenanceRequest"
+    post:
+      operationId: createMaintenanceRequest
+      tags: [admin]
+      summary: Record a maintenance request for an existing or new vehicle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaintenanceRequestInput"
+      responses:
+        "201":
+          description: Created request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenanceRequest"
+  /admin/maintenance-requests/{id}:
+    patch:
+      operationId: updateMaintenanceRequest
+      tags: [admin]
+      summary: Update a maintenance request
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaintenanceRequestUpdate"
+      responses:
+        "200":
+          description: Updated request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MaintenanceRequest"
+  /contact-inquiries:
+    post:
+      operationId: createContactInquiry
+      tags: [public]
+      summary: Save a public contact inquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactInquiryInput"
+      responses:
+        "201":
+          description: Saved inquiry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactInquiry"
+  /admin/contact-inquiries:
+    get:
+      operationId: listContactInquiries
+      tags: [admin]
+      summary: List contact inquiries
+      responses:
+        "200":
+          description: Inquiries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContactInquiry"
+  /admin/contact-inquiries/{id}:
+    patch:
+      operationId: updateContactInquiry
+      tags: [admin]
+      summary: Update inquiry status
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactInquiryUpdate"
+      responses:
+        "200":
+          description: Updated inquiry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactInquiry"
+  /admin/quotations:
+    get:
+      operationId: listQuotations
+      tags: [admin]
+      summary: List quotations
+      responses:
+        "200":
+          description: Quotations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quotation"
+    post:
+      operationId: createQuotation
+      tags: [admin]
+      summary: Create a quotation linked to a maintenance request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotationInput"
+      responses:
+        "201":
+          description: Created quotation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quotation"
+  /admin/quotations/{id}:
+    patch:
+      operationId: updateQuotation
+      tags: [admin]
+      summary: Update quotation status or line items
+      parameters:
+        - $ref: "#/components/parameters/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotationUpdate"
+      responses:
+        "200":
+          description: Updated quotation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quotation"
+components:
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    AccessState:
+      type: object
+      required: [authenticated, isAdmin]
+      properties:
+        authenticated: { type: boolean }
+        isAdmin: { type: boolean }
+        userId: { type: ["string", "null"] }
+        email: { type: ["string", "null"] }
+    SiteContent:
+      type: object
+      required:
+        [businessName, contactPerson, phone, email, address, heroTitle, heroSubtitle, heroDescription, aboutTitle, aboutBody, servicesTitle, servicesDescription, vehiclesTitle, contactTitle, contactDescription, footerText, copyrightText, seoTitle, seoDescription, primaryButtonLabel, primaryButtonLink, secondaryButtonLabel, secondaryButtonLink, showServices, showVehicles, logoUrl]
+      properties:
+        businessName: { type: string }
+        contactPerson: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        address: { type: string }
+        heroTitle: { type: string }
+        heroSubtitle: { type: string }
+        heroDescription: { type: string }
+        aboutTitle: { type: string }
+        aboutBody: { type: string }
+        servicesTitle: { type: string }
+        servicesDescription: { type: string }
+        vehiclesTitle: { type: string }
+        contactTitle: { type: string }
+        contactDescription: { type: string }
+        footerText: { type: string }
+        copyrightText: { type: string }
+        seoTitle: { type: string }
+        seoDescription: { type: string }
+        primaryButtonLabel: { type: string }
+        primaryButtonLink: { type: string }
+        secondaryButtonLabel: { type: string }
+        secondaryButtonLink: { type: string }
+        showServices: { type: boolean }
+        showVehicles: { type: boolean }
+        logoUrl: { type: ["string", "null"] }
+    SiteContentInput:
+      type: object
+      required:
+        [businessName, contactPerson, phone, email, address, heroTitle, heroSubtitle, heroDescription, aboutTitle, aboutBody, servicesTitle, servicesDescription, vehiclesTitle, contactTitle, contactDescription, footerText, copyrightText, seoTitle, seoDescription, primaryButtonLabel, primaryButtonLink, secondaryButtonLabel, secondaryButtonLink, showServices, showVehicles]
+      properties:
+        businessName: { type: string, minLength: 1, maxLength: 180 }
+        contactPerson: { type: string, maxLength: 180 }
+        phone: { type: string, maxLength: 40 }
+        email: { type: string, maxLength: 254 }
+        address: { type: string, maxLength: 500 }
+        heroTitle: { type: string, maxLength: 300 }
+        heroSubtitle: { type: string, maxLength: 300 }
+        heroDescription: { type: string, maxLength: 3000 }
+        aboutTitle: { type: string, maxLength: 300 }
+        aboutBody: { type: string, maxLength: 5000 }
+        servicesTitle: { type: string, maxLength: 300 }
+        servicesDescription: { type: string, maxLength: 3000 }
+        vehiclesTitle: { type: string, maxLength: 300 }
+        contactTitle: { type: string, maxLength: 300 }
+        contactDescription: { type: string, maxLength: 3000 }
+        footerText: { type: string, maxLength: 2000 }
+        copyrightText: { type: string, maxLength: 300 }
+        seoTitle: { type: string, maxLength: 300 }
+        seoDescription: { type: string, maxLength: 500 }
+        primaryButtonLabel: { type: string, maxLength: 100 }
+        primaryButtonLink: { type: string, maxLength: 500 }
+        secondaryButtonLabel: { type: string, maxLength: 100 }
+        secondaryButtonLink: { type: string, maxLength: 500 }
+        showServices: { type: boolean }
+        showVehicles: { type: boolean }
+        logoUrl: { type: ["string", "null"], maxLength: 2000 }
+    Service:
+      type: object
+      required: [id, title, slug, summary, description, imageUrl, isPublished, sortOrder, createdAt]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        slug: { type: string }
+        summary: { type: string }
+        description: { type: string }
+        imageUrl: { type: ["string", "null"] }
+        isPublished: { type: boolean }
+        sortOrder: { type: integer }
+        createdAt: { type: string, format: date-time }
+    ServiceInput:
+      type: object
+      required: [title, summary, description, isPublished, sortOrder]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 180 }
+        summary: { type: string, maxLength: 500 }
+        description: { type: string, maxLength: 5000 }
+        imageUrl: { type: ["string", "null"], maxLength: 2000 }
+        isPublished: { type: boolean }
+        sortOrder: { type: integer, minimum: 0 }
+    ServiceUpdate:
+      type: object
+      properties:
+        title: { type: string, minLength: 1, maxLength: 180 }
+        summary: { type: string, maxLength: 500 }
+        description: { type: string, maxLength: 5000 }
+        imageUrl: { type: ["string", "null"], maxLength: 2000 }
+        isPublished: { type: boolean }
+        sortOrder: { type: integer, minimum: 0 }
+    VehicleCategory:
+      type: object
+      required: [id, name, description, sortOrder, isActive]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        description: { type: string }
+        sortOrder: { type: integer }
+        isActive: { type: boolean }
+    VehicleCategoryInput:
+      type: object
+      required: [name, description, sortOrder, isActive]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 120 }
+        description: { type: string, maxLength: 500 }
+        sortOrder: { type: integer, minimum: 0 }
+        isActive: { type: boolean }
+    VehicleCategoryUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1, maxLength: 120 }
+        description: { type: string, maxLength: 500 }
+        sortOrder: { type: integer, minimum: 0 }
+        isActive: { type: boolean }
+    Brand:
+      type: object
+      required: [id, name, isActive]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        isActive: { type: boolean }
+    BrandInput:
+      type: object
+      required: [name, isActive]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 120 }
+        isActive: { type: boolean }
+    BrandUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1, maxLength: 120 }
+        isActive: { type: boolean }
+    DashboardSummary:
+      type: object
+      required: [companies, vehicles, openRequests, pendingInquiries, quotations, recentRequests]
+      properties:
+        companies: { type: integer }
+        vehicles: { type: integer }
+        openRequests: { type: integer }
+        pendingInquiries: { type: integer }
+        quotations: { type: integer }
+        recentRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/MaintenanceRequest"
+    Company:
+      type: object
+      required: [id, name, contactPerson, phone, email, address, notes, createdAt]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        contactPerson: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        address: { type: string }
+        notes: { type: string }
+        createdAt: { type: string, format: date-time }
+    CompanyDetail:
+      allOf:
+        - $ref: "#/components/schemas/Company"
+        - type: object
+          required: [vehicles]
+          properties:
+            vehicles:
+              type: array
+              items:
+                $ref: "#/components/schemas/Vehicle"
+    CompanyInput:
+      type: object
+      required: [name, contactPerson, phone, email, address, notes]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 180 }
+        contactPerson: { type: string, maxLength: 180 }
+        phone: { type: string, maxLength: 40 }
+        email: { type: string, maxLength: 254 }
+        address: { type: string, maxLength: 500 }
+        notes: { type: string, maxLength: 3000 }
+    CompanyUpdate:
+      type: object
+      properties:
+        name: { type: string, minLength: 1, maxLength: 180 }
+        contactPerson: { type: string, maxLength: 180 }
+        phone: { type: string, maxLength: 40 }
+        email: { type: string, maxLength: 254 }
+        address: { type: string, maxLength: 500 }
+        notes: { type: string, maxLength: 3000 }
+    Vehicle:
+      type: object
+      required: [id, registrationNumber, companyId, companyName, brandId, brandName, categoryId, categoryName, model, year, notes, createdAt]
+      properties:
+        id: { type: integer }
+        registrationNumber: { type: string }
+        companyId: { type: integer }
+        companyName: { type: string }
+        brandId: { type: ["integer", "null"] }
+        brandName: { type: ["string", "null"] }
+        categoryId: { type: ["integer", "null"] }
+        categoryName: { type: ["string", "null"] }
+        model: { type: string }
+        year: { type: ["integer", "null"] }
+        notes: { type: string }
+        createdAt: { type: string, format: date-time }
+    VehicleInput:
+      type: object
+      required: [registrationNumber, companyId, model, notes]
+      properties:
+        registrationNumber: { type: string, minLength: 1, maxLength: 50 }
+        companyId: { type: integer, minimum: 1 }
+        brandId: { type: ["integer", "null"] }
+        categoryId: { type: ["integer", "null"] }
+        model: { type: string, maxLength: 120 }
+        year: { type: ["integer", "null"], minimum: 1900, maximum: 2200 }
+        notes: { type: string, maxLength: 2000 }
+    VehicleUpdate:
+      type: object
+      properties:
+        registrationNumber: { type: string, minLength: 1, maxLength: 50 }
+        companyId: { type: integer, minimum: 1 }
+        brandId: { type: ["integer", "null"] }
+        categoryId: { type: ["integer", "null"] }
+        model: { type: string, maxLength: 120 }
+        year: { type: ["integer", "null"], minimum: 1900, maximum: 2200 }
+        notes: { type: string, maxLength: 2000 }
+    MaintenanceRequest:
+      type: object
+      required: [id, companyId, companyName, vehicleId, registrationNumber, issueDescription, status, createdAt]
+      properties:
+        id: { type: integer }
+        companyId: { type: integer }
+        companyName: { type: string }
+        vehicleId: { type: integer }
+        registrationNumber: { type: string }
+        issueDescription: { type: string }
+        status: { type: string, enum: [New, In Progress, Completed, Cancelled] }
+        createdAt: { type: string, format: date-time }
+    MaintenanceRequestInput:
+      type: object
+      required: [companyId, vehicleId, issueDescription]
+      properties:
+        companyId: { type: integer, minimum: 1 }
+        vehicleId: { type: integer, minimum: 1 }
+        issueDescription: { type: string, minLength: 1, maxLength: 5000 }
+    MaintenanceRequestUpdate:
+      type: object
+      properties:
+        issueDescription: { type: string, minLength: 1, maxLength: 5000 }
+        status: { type: string, enum: [New, In Progress, Completed, Cancelled] }
+    ContactInquiry:
+      type: object
+      required: [id, name, email, phone, subject, message, status, createdAt]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+        subject: { type: string }
+        message: { type: string }
+        status: { type: string, enum: [New, Read, Replied, Closed] }
+        createdAt: { type: string, format: date-time }
+    ContactInquiryInput:
+      type: object
+      required: [name, email, phone, subject, message]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 180 }
+        email: { type: string, format: email, minLength: 3, maxLength: 254 }
+        phone: { type: string, maxLength: 40 }
+        subject: { type: string, maxLength: 200 }
+        message: { type: string, minLength: 1, maxLength: 5000 }
+    ContactInquiryUpdate:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [New, Read, Replied, Closed] }
+    Quotation:
+      type: object
+      required: [id, requestId, companyName, registrationNumber, status, notes, items, total, createdAt]
+      properties:
+        id: { type: integer }
+        requestId: { type: integer }
+        companyName: { type: string }
+        registrationNumber: { type: string }
+        status: { type: string, enum: [Draft, Sent, Approved, Rejected] }
+        notes: { type: string }
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuotationItem"
+        total: { type: number }
+        createdAt: { type: string, format: date-time }
+    QuotationItem:
+      type: object
+      required: [description, quantity, unitPrice, lineTotal]
+      properties:
+        description: { type: string }
+        quantity: { type: number }
+        unitPrice: { type: number }
+        lineTotal: { type: number }
+    QuotationItemInput:
+      type: object
+      required: [description, quantity, unitPrice]
+      properties:
+        description: { type: string, minLength: 1, maxLength: 500 }
+        quantity: { type: number, exclusiveMinimum: 0 }
+        unitPrice: { type: number, minimum: 0 }
+    QuotationInput:
+      type: object
+      required: [requestId, notes, items]
+      properties:
+        requestId: { type: integer, minimum: 1 }
+        notes: { type: string, maxLength: 3000 }
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/QuotationItemInput"
+    QuotationUpdate:
+      type: object
+      properties:
+        status: { type: string, enum: [Draft, Sent, Approved, Rejected] }
+        notes: { type: string, maxLength: 3000 }
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/QuotationItemInput"
+
